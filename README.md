@@ -26,7 +26,7 @@ cmake ../src
 ```
 make
 ```
-4. Now you have "scala-lex" exeutable in your directory. You can run it as usual.
+4. Now you have "scala-lex" exeсutable in your directory. You can run it as usual.
 
 
 ## Contribute
