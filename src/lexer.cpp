@@ -5,10 +5,8 @@ void lexer::Lexer::scan() {
     // lexer implementation goes here
     auto it = source.begin();   
     while(it != source.end()) {
-        char ch = *it;
-        if (ch == ' ') {
-            buf.emplace_back(TokenType::Whitespace);
-        }
-        it++;
+        auto word =  getWord(it);
+        
+        it += word.len;
     }
 }

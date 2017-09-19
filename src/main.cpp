@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv)
 {
-    std::string source{"   "};
+    std::string source{"if def(while);true"};
     lexer::Lexer lexer{source};
     auto buffer = lexer.token_buffer();
     std::cout << buffer.size() << "\n";
