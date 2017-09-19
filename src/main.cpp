@@ -4,9 +4,10 @@
 
 int main(int argc, char **argv)
 {
-    lexer::Lexer lexer{"Hello World"};
+    std::string source{"   "};
+    lexer::Lexer lexer{source};
     auto buffer = lexer.token_buffer();
-    std::cout << buffer.size();
+    std::cout << buffer.size() << "\n";
 
     return 0;
 }

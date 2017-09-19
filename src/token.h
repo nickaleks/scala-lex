@@ -5,7 +5,7 @@ namespace lexer
 
 enum class TokenType 
 {
-    If, Else, For, While
+    Whitespace, If, Else, For, While
     //To be continued
 };
 

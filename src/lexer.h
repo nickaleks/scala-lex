@@ -8,7 +8,7 @@ class Lexer
     std::vector<Token> buf{};
     const std::string& source;
 public:
-    Lexer(const std::string& source): source{source} 
+    Lexer(const std::string& source): source{source}
     {
         scan();
     };
