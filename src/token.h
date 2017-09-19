@@ -7,7 +7,7 @@ enum class TokenType
 {
     If, Else, For, While
     //To be continued
-} 
+};
 
 class Token
 {
@@ -17,7 +17,7 @@ public:
 
     Token(TokenType type, std::string value): type{type}, value{value} {};
 
-    Token(TokenType type) type{type}, value{""} {};
-}
+    Token(TokenType type): type{type}, value{""} {};
+};
 
 }
