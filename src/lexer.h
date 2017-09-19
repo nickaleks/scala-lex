@@ -11,6 +11,19 @@ public:
     const long len;
 
     SourceWord(Iter it, long len): it{it}, len{len} {};
+
+    bool operator==(const std::string& rhs) 
+    {
+        if (len != rhs.length()) {
+            return false;
+        }
+        for (int i = 0; i < len; i++) {
+            if (*(it + i) != rhs[i]){
+                return false;
+            }
+        }
+        return true;
+    };
 };
 
 class Lexer
