@@ -1,23 +1,37 @@
 #include <string>
+#include <unordered_map>
 
-namespace lexer 
-{
+namespace lexer {
 
-enum class TokenType 
-{
-    Whitespace, If, Else, For, While
-    //To be continued
-};
+    enum class TokenType {
+        // Prefix  is because some of them are C++ reserved words as well
+        Abstract, Case, Catch, Class, Def,
+        Do, Else, False, Final, Extends,
+        Finally, For, ForSome, If, Implicit,
+        Import, Lazy, Macro, Match, New,
+        Null, Object, Override, Package, Private,
+        Protected, Return, Sealed, Super, This,
+        Throw, Trait, Try, True, Type,
+        Val, Var, While, With, Yield,
+        Whitespace, Underscore, Colon, Equal,
+        Lambda,             // =>
+        ForLoopIterator,    // <-
+        UpperBounds,        // <:
+        LowerBounds,        // >:
+        ViewBounds,         // <%
+        TypeNotation,       // #
+        PatternMatching     // @
+    };
 
-class Token
-{
-public:
-    TokenType type;
-    std::string value;
+    class Token {
+    public:
+        TokenType type;
+        std::string value;
 
-    Token(TokenType type, std::string value): type{type}, value{value} {};
+        Token(TokenType type, std::string value) : type{type}, value{value} {};
 
-    Token(TokenType type): type{type}, value{""} {};
-};
+        Token(TokenType type) : type{type}, value{""} {};
 
+        static const std::unordered_map<lexer::TokenType, std::string> to_string;
+    };
 }

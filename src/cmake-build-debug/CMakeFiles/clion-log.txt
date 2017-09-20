@@ -1,0 +1,4 @@
+/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Volumes/storage/Workspace/CLion/scala-lex/src
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Volumes/storage/Workspace/CLion/scala-lex/src/cmake-build-debug

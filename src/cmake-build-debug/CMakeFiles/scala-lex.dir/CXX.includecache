@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Volumes/storage/Workspace/CLion/scala-lex/src/lexer.cpp
+lexer.h
+/Volumes/storage/Workspace/CLion/scala-lex/src/lexer.h
+iostream
+-
+
+/Volumes/storage/Workspace/CLion/scala-lex/src/lexer.h
+vector
+-
+iostream
+-
+token.h
+/Volumes/storage/Workspace/CLion/scala-lex/src/token.h
+
+/Volumes/storage/Workspace/CLion/scala-lex/src/main.cpp
+iostream
+-
+lexer.h
+/Volumes/storage/Workspace/CLion/scala-lex/src/lexer.h
+
+/Volumes/storage/Workspace/CLion/scala-lex/src/token.cpp
+token.h
+/Volumes/storage/Workspace/CLion/scala-lex/src/token.h
+
+/Volumes/storage/Workspace/CLion/scala-lex/src/token.h
+string
+-
+unordered_map
+-
+

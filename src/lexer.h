@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 #include "token.h"
 
 namespace lexer
@@ -12,7 +13,7 @@ public:
 
     SourceWord(Iter it, long len): it{it}, len{len} {};
 
-    bool operator==(const std::string& rhs) 
+    bool operator==(const std::string& rhs)
     {
         if (len != rhs.length()) {
             return false;
@@ -38,20 +39,26 @@ public:
 
     std::vector<Token>& token_buffer() { return buf; };
 
+    void print_buffer() const {
+        for (const auto &i : buf)
+            std::cout << Token::to_string.at(i.type) << "\n";
+    }
+
 private:
 
     // Type declarations for convenience
     using string_iter = decltype(source.begin());
     using Word = SourceWord<string_iter>;
-    // Parse source text and populate token buffer  
+    // Parse source text and populate token buffer
     void scan();
 
-    bool is_separator(char ch) {
-        return ch == ' ' || ch == '(' || ch == ')' || 
-               ch == '{' || ch == '}' || ch == '[' || 
+    bool is_separator(char ch)
+    {
+        return ch == ' ' || ch == '(' || ch == ')' ||
+               ch == '{' || ch == '}' || ch == '[' ||
                ch == ']' || ch == '\n' || ch == ';';
     }
-    
+
     Word getWord(string_iter pos)
     {
         char ch = *pos;

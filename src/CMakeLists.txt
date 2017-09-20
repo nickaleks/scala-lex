@@ -4,4 +4,5 @@ project(myproject VERSION 0.1 LANGUAGES CXX)
 add_executable(scala-lex
     lexer.cpp
     main.cpp
-)
+        token.cpp)
+set(CMAKE_CXX_FLAGS "-std=c++14")
