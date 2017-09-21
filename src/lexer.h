@@ -41,7 +41,7 @@ public:
 
     void print_buffer() const {
         for (const auto &i : buf)
-            std::cout << Token::to_string.at(i.type) << "\n";
+            std::cout << Token::to_string.at(i.type) << "(" << i.value << ")" << "\n";
     }
 
 private:
@@ -56,7 +56,8 @@ private:
     {
         return ch == ' ' || ch == '(' || ch == ')' ||
                ch == '{' || ch == '}' || ch == '[' ||
-               ch == ']' || ch == '\n' || ch == ';';
+               ch == ']' || ch == '\n' || ch == ';' ||
+               ch == '\t';
     }
 
     Word getWord(string_iter pos)

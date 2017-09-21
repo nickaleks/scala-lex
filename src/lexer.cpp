@@ -109,6 +109,26 @@ void lexer::Lexer::scan() {
             buf.emplace_back(TokenType::TypeNotation);
         } else if (word == "@") {
             buf.emplace_back(TokenType::PatternMatching);
+        } else if (word== "(") {
+            buf.emplace_back(TokenType::OpenParenthesis);
+        } else if (word== ")") {
+            buf.emplace_back(TokenType::CloseParenthesis);
+        } else if (word == "{") {
+            buf.emplace_back(TokenType::OpenBrace);
+        } else if (word == "}") {
+            buf.emplace_back(TokenType::CloseBrace);
+        } else if (word == "[") {
+            buf.emplace_back(TokenType::OpenBracket);
+        } else if (word == "]") {
+            buf.emplace_back(TokenType::CloseBracket);
+        } else if (word == ";") {
+            buf.emplace_back(TokenType::EndOfExpression, ";");
+        } else if (word == "\n") {
+            buf.emplace_back(TokenType::NewLine);
+        } else if (word == "\t") {
+            buf.emplace_back(TokenType::Tab);
+        } else {
+            buf.emplace_back(TokenType::InvalidToken);
         }
 
         iterator += word.len;

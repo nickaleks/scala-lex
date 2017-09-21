@@ -20,7 +20,17 @@ namespace lexer {
         LowerBounds,        // >:
         ViewBounds,         // <%
         TypeNotation,       // #
-        PatternMatching     // @
+        PatternMatching,    // @
+        EndOfExpression,
+        OpenParenthesis,
+        CloseParenthesis,
+        OpenBrace,
+        CloseBrace,
+        OpenBracket,
+        CloseBracket,
+        NewLine,
+        Tab,
+        InvalidToken
     };
 
     class Token {

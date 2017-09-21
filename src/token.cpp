@@ -51,5 +51,15 @@ const std::unordered_map<lexer::TokenType, std::string> lexer::Token::to_string 
         {lexer::TokenType::ViewBounds, "token<viewBounds>"},
         {lexer::TokenType::LowerBounds, "token<lowerBounds>"},
         {lexer::TokenType::TypeNotation, "token<typeNotation>"},
-        {lexer::TokenType::PatternMatching, "token<patternMatching>"}
+        {lexer::TokenType::PatternMatching, "token<patternMatching>"},
+        {lexer::TokenType::EndOfExpression, "token<endOfExpression>"},
+        {lexer::TokenType::InvalidToken, "token<invalidToken>"},
+        {lexer::TokenType::OpenParenthesis, "token<openParenthesis>"},
+        {lexer::TokenType::CloseParenthesis, "token<closeParenthesis>"},
+        {lexer::TokenType::OpenBrace, "token<openBrace>"},
+        {lexer::TokenType::CloseBrace, "token<closeBrace>"},
+        {lexer::TokenType::OpenBracket, "token<openBracket>"},
+        {lexer::TokenType::CloseBracket, "token<closeBracket>"},
+        {lexer::TokenType::NewLine, "token<newLine>"},
+        {lexer::TokenType::Tab, "token<tab>"}
 };
