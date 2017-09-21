@@ -106,5 +106,82 @@ private:
             buf.emplace_back(TokenType::NewLine);
         }
     }
+
+    /*
+     * Understands, if the next statement is going to be an XML one; does
+     * not shift the iterator
+     */
+    bool xml_begins(string_iter iterator) {
+        // XML must be preceded with whitespace, or either of brackets
+        // If buffer is empty, skip this check
+        if (!buf.empty()) {
+            auto &prev = buf.back();
+            if (!(prev.type == TokenType::Whitespace || prev.type == TokenType::OpenBracket ||
+                  prev.type == TokenType::OpenBrace))
+                return false;
+        }
+
+        // Then, goes the '<' symbol
+        char next = *iterator;
+        if (next != '<')
+            return false;
+
+        // Then, goes '_', base char or ideographic
+        iterator++;
+        next = *iterator;
+        if (next == '_' || isalpha(next)) {
+            iterator--;
+            return true;
+        }
+        iterator--;
+        return false;
+    }
+
+    /*
+     * Analyzes the XML and shifts the iterator; assumes that XML is valid
+     */
+    void process_xml(string_iter &iterator) {
+        // Take the first tag
+        iterator++;
+        char curChar = *iterator;
+        std::string firstTag;
+        firstTag += curChar;
+        iterator++;
+        while ((curChar = *iterator) != '>') {
+            firstTag += curChar;
+            iterator++;
+        }
+
+        // Now, we have the first tag and we need to proceed until
+        // we find the closing first tag, </firstTag>
+        std::string secondTag;
+        while (true) {
+            secondTag = "";
+            // Proceed until we find an open bracket
+            iterator++;
+            curChar = *iterator;
+            if (curChar == '<') {
+                // If the open bracket is followed by a slash, it is
+                // a close tag
+                iterator++;
+                curChar = *iterator;
+                if (curChar == '/') {
+                    // Take the tag, which is closed by those brackets
+                    iterator++;
+                    while ((curChar = *iterator) != '>') {
+                        secondTag += curChar;
+                        iterator++;
+                    }
+                    // If this tag is equal to the first one, we found
+                    // end of XML insertion
+                    if (firstTag == secondTag)
+                        break;
+                }
+            }
+        }
+
+        // Iterator is on the last close bracket, so move it forward
+        iterator++;
+    }
 };
 }

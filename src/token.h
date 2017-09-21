@@ -30,6 +30,7 @@ namespace lexer {
         CloseBracket,
         NewLine,
         Tab,
+        XMLInclusion,
         InvalidToken
     };
 

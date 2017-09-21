@@ -61,5 +61,6 @@ const std::unordered_map<lexer::TokenType, std::string> lexer::Token::to_string 
         {lexer::TokenType::OpenBracket, "token<openBracket>"},
         {lexer::TokenType::CloseBracket, "token<closeBracket>"},
         {lexer::TokenType::NewLine, "token<newLine>"},
-        {lexer::TokenType::Tab, "token<tab>"}
+        {lexer::TokenType::Tab, "token<tab>"},
+        {lexer::TokenType::XMLInclusion, "token<XML>"}
 };
