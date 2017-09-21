@@ -41,7 +41,7 @@ public:
 
     void print_buffer() const {
         for (const auto &i : buf) {
-            std::cout << Token::to_string.at(i.type) << "(" << i.value << ")" << "\n";
+            std::cout << Token::to_string.at(i.type) << "(" << i.value << ")" << " ";
             // std::cout << "New lines enabled: " << new_lines_enabled << "\n";
             // std::cout << "Can Terminate Statement: " << can_terminate_statement(i) << "\n";
         }
