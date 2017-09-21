@@ -32,7 +32,7 @@ class Lexer
     std::vector<Token> buf{};
     const std::string& source;
 public:
-    Lexer(const std::string& source): source{source}
+    Lexer(const std::string& source): source{source}, new_lines_enabled{true}
     {
         scan();
     };
@@ -40,8 +40,11 @@ public:
     std::vector<Token>& token_buffer() { return buf; };
 
     void print_buffer() const {
-        for (const auto &i : buf)
+        for (const auto &i : buf) {
             std::cout << Token::to_string.at(i.type) << "(" << i.value << ")" << "\n";
+            // std::cout << "New lines enabled: " << new_lines_enabled << "\n";
+            // std::cout << "Can Terminate Statement: " << can_terminate_statement(i) << "\n";
+        }
     }
 
 private:
@@ -49,15 +52,30 @@ private:
     // Type declarations for convenience
     using string_iter = decltype(source.begin());
     using Word = SourceWord<string_iter>;
+
+    bool new_lines_enabled;
     // Parse source text and populate token buffer
     void scan();
 
-    bool is_separator(char ch)
+    bool is_separator(char ch) const
     {
         return ch == ' ' || ch == '(' || ch == ')' ||
                ch == '{' || ch == '}' || ch == '[' ||
                ch == ']' || ch == '\n' || ch == ';' ||
                ch == '\t';
+    }
+
+    bool can_terminate_statement(const Token& tok) const {
+        return tok.type == TokenType::This ||
+               tok.type == TokenType::Null ||
+               tok.type == TokenType::True ||
+               tok.type == TokenType::False ||
+               tok.type == TokenType::Return ||
+               tok.type == TokenType::Type ||
+               tok.type == TokenType::Underscore ||
+               tok.type == TokenType::CloseParenthesis ||
+               tok.type == TokenType::CloseBrace ||
+               tok.type == TokenType::CloseBracket;
     }
 
     Word getWord(string_iter pos)
@@ -76,5 +94,17 @@ private:
         ch--;
         return Word{begin, len - 1};
     };
+
+    // This function analyzes last token in buffer, 
+    // and if it is an end of statement token 
+    // with newline value, it replace it with NewLine token. 
+    // Otherwise does nothing
+    void replace_end_of_statement() {
+        auto& prev = buf.back();
+        if (prev.type == TokenType::EndOfExpression && prev.value == "\\n") {
+            buf.pop_back();
+            buf.emplace_back(TokenType::NewLine);
+        }
+    }
 };
 }
