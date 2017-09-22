@@ -14,6 +14,8 @@ namespace lexer {
         Throw, Trait, Try, True, Type,
         Val, Var, While, With, Yield,
         Whitespace, Underscore, Colon, Equal,
+        Comma,              // ,
+        Dot,                // .
         Lambda,             // =>
         ForLoopIterator,    // <-
         UpperBounds,        // <:

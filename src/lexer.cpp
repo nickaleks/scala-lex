@@ -13,6 +13,10 @@ void lexer::Lexer::scan() {
         else {
             if (word == " ") {
                 buf.emplace_back(TokenType::Whitespace);
+            } else if (word == ",") {
+                buf.emplace_back(TokenType::Comma);
+            } else if (word == ".") {
+                buf.emplace_back(TokenType::Dot);
             } else if (word == "abstract") {
                 buf.emplace_back(TokenType::Abstract);
             } else if (word == "case") {

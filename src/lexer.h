@@ -57,10 +57,10 @@ private:
 
     bool is_separator(char ch) const
     {
-        return ch == ' ' || ch == '(' || ch == ')' ||
-               ch == '{' || ch == '}' || ch == '[' ||
-               ch == ']' || ch == '\n' || ch == ';' ||
-               ch == '\t';
+        return ch == ' ' || ch == ',' || ch == '.' ||
+               ch == '(' || ch == ')' || ch == '{' ||
+               ch == '}' || ch == '[' || ch == ']' ||
+               ch == '\n' || ch == ';' || ch == '\t';
     }
 
     bool can_terminate_statement(const Token& tok) const {
