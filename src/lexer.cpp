@@ -169,7 +169,7 @@ void lexer::Lexer::scan() {
             } else if (word == "\t") {
                 buf.emplace_back(TokenType::Tab);
             } else {
-                buf.emplace_back(TokenType::InvalidToken);
+                buf.emplace_back(TokenType::InvalidToken, *word);
             }
             iterator += word.len;
         }

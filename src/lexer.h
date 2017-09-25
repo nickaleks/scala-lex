@@ -25,6 +25,17 @@ public:
         }
         return true;
     };
+
+    // Makes copy of sliced string
+    std::string operator*() {
+        std::string res{};
+        res.reserve(len);
+        for (int i = 0; i < len; i++, it++) {
+            res += *it;
+        }
+
+        return res;
+    }
 };
 
 class InvalidXMLException: public std::runtime_error
@@ -51,7 +62,9 @@ public:
         scan();
     };
 
-    std::vector<Token>& token_buffer() { return buf; };
+    std::vector<Token>& token_buffer() { 
+        return buf; 
+    };
 
     void print_buffer() const {
         for (const auto &i : buf) {
