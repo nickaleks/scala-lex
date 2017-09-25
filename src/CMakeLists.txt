@@ -5,4 +5,4 @@ add_executable(scala-lex
     lexer.cpp
     main.cpp
         token.cpp)
-set(CMAKE_CXX_FLAGS "-std=c++14")
+set(CMAKE_CXX_FLAGS "-std=c++14  -Wextra -Wall -Wundef -Wpointer-arith -Wno-sign-compare")

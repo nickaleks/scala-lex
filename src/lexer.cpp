@@ -204,7 +204,7 @@ Lexer::Word Lexer::get_word(string_iter pos)
 {
     char ch = *pos;
     auto begin = pos;
-    long len = 1;
+    std::size_t len = 1;
     if (is_separator(ch)) {
         return Word{begin, len};
     }

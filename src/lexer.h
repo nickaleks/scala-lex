@@ -9,9 +9,9 @@ class SourceWord
 {
 public:
     Iter it;
-    const long len;
+    const std::size_t len;
 
-    SourceWord(Iter it, long len): it{it}, len{len} {};
+    SourceWord(Iter it, std::size_t len): it{it}, len{len} {};
 
     bool operator==(const std::string& rhs)
     {
@@ -30,7 +30,7 @@ public:
     std::string operator*() {
         std::string res{};
         res.reserve(len);
-        for (int i = 0; i < len; i++, it++) {
+        for (auto i = 0; i < len; i++, it++) {
             res += *it;
         }
 
@@ -130,7 +130,6 @@ private:
      */
     void process_xml(string_iter &iterator) {
         // Take the first tag
-        auto begin = iterator;
         iterator++;
         char curChar = *iterator;
         std::string firstTag;
