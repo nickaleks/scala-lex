@@ -216,8 +216,8 @@ private:
 
     enum class CommentType
     {
-        singleLine,
-        multiline
+        Singleline,
+        Multiline
     };
 
     bool comment_begins(string_iter& iterator)
@@ -232,12 +232,12 @@ private:
 
         if (curChar == '/')
         {
-            process_comment(iterator, CommentType::singleLine);
+            process_comment(iterator, CommentType::Singleline);
             return true;
         }
         else if (curChar == '*')
         {
-            process_comment(iterator, CommentType::multiline);
+            process_comment(iterator, CommentType::Multiline);
             return true;
         }
         return false;
@@ -249,7 +249,7 @@ private:
         auto curChar = *iterator;
         iterator++;
 
-        if (commentType == CommentType::singleLine)
+        if (commentType == CommentType::Singleline)
         {
             // Go until end of line is met
             while (curChar != '\n' && iterator != source.end())
