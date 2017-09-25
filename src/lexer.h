@@ -200,5 +200,69 @@ private:
         // Iterator is on the last close bracket, so move it forward
         iterator++;
     }
+
+    enum class CommentType
+    {
+        singleLine,
+        multiline
+    };
+
+    bool comment_begins(string_iter& iterator)
+    {
+        // Comment begins with // or /*
+        auto curChar = *iterator;
+        if (curChar != '/')
+            return false;
+
+        iterator++;
+        curChar = *iterator;
+
+        if (curChar == '/')
+        {
+            process_comment(iterator, CommentType::singleLine);
+            return true;
+        }
+        else if (curChar == '*')
+        {
+            process_comment(iterator, CommentType::multiline);
+            return true;
+        }
+        return false;
+    }
+
+    void process_comment(string_iter& iterator, CommentType commentType)
+    {
+        iterator++;
+        auto curChar = *iterator;
+        iterator++;
+
+        if (commentType == CommentType::singleLine)
+        {
+            // Go until end of line is met
+            while (curChar != '\n' && iterator != source.end())
+            {
+                curChar = *iterator;
+                iterator++;
+            }
+        }
+        else
+        {
+            while (iterator != source.end())
+            {
+                curChar = *iterator;
+                if (curChar == '*')
+                {
+                    iterator++;
+                    curChar = *iterator;
+                    if (curChar == '/')
+                        break;
+                }
+                iterator++;
+            }
+        }
+
+        if (iterator != source.end())
+            iterator++;
+    }
 };
 }

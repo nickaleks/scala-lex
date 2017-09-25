@@ -33,6 +33,7 @@ namespace lexer {
         NewLine,
         Tab,
         XMLInclusion,
+        Comment,
         InvalidToken
     };
 

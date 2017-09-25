@@ -10,6 +10,9 @@ void lexer::Lexer::scan() {
             process_xml(iterator);
             buf.emplace_back(TokenType::XMLInclusion);
         }
+        else if (comment_begins(iterator)) {
+            buf.emplace_back(TokenType::Comment);
+        }
         else {
             if (word == " ") {
                 buf.emplace_back(TokenType::Whitespace);
