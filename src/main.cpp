@@ -23,7 +23,7 @@ void interpretation_mode()
         getline(std::cin, input);
         lexer::Lexer lexer{input};
         lexer.token_buffer();
-        std::cout << "\nResult: ";
+        std::cout << "\nResult:\n";
         lexer.print_buffer();
         std::cout << "\n\n>> ";
     }

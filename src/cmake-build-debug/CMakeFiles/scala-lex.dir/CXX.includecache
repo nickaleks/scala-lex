@@ -21,6 +21,10 @@ token.h
 /Volumes/storage/Workspace/CLion/scala-lex/src/main.cpp
 iostream
 -
+fstream
+-
+sstream
+-
 lexer.h
 /Volumes/storage/Workspace/CLion/scala-lex/src/lexer.h
 

@@ -27,6 +27,20 @@ public:
     };
 };
 
+class InvalidXMLException: public std::runtime_error
+{
+public:
+    explicit InvalidXMLException()
+            : std::runtime_error(exceptionMessage) {}
+
+    const char* what() const throw() override {
+        return exceptionMessage.c_str();
+    }
+
+private:
+    std::string exceptionMessage = "Invalid XML construction";
+};
+
 class Lexer
 {
     std::vector<Token> buf{};
@@ -140,6 +154,7 @@ private:
      */
     void process_xml(string_iter &iterator) {
         // Take the first tag
+        auto begin = iterator;
         iterator++;
         char curChar = *iterator;
         std::string firstTag;
@@ -153,7 +168,7 @@ private:
         // Now, we have the first tag and we need to proceed until
         // we find the closing first tag, </firstTag>
         std::string secondTag;
-        while (true) {
+        while (iterator != source.end()) {
             secondTag = "";
             // Proceed until we find an open bracket
             iterator++;
@@ -177,6 +192,10 @@ private:
                 }
             }
         }
+
+        // If they are not equal, XML format is wrong
+        if (firstTag != secondTag)
+            throw InvalidXMLException();
 
         // Iterator is on the last close bracket, so move it forward
         iterator++;
