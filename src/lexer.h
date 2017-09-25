@@ -82,55 +82,18 @@ private:
     // Parse source text and populate token buffer
     void scan();
 
-    bool is_separator(char ch) const
-    {
-        return ch == ' ' || ch == ',' || ch == '.' ||
-               ch == '(' || ch == ')' || ch == '{' ||
-               ch == '}' || ch == '[' || ch == ']' ||
-               ch == '\n' || ch == ';' || ch == '\t';
-    }
+    bool is_separator(char ch) const;
 
-    bool can_terminate_statement(const Token& tok) const {
-        return tok.type == TokenType::This ||
-               tok.type == TokenType::Null ||
-               tok.type == TokenType::True ||
-               tok.type == TokenType::False ||
-               tok.type == TokenType::Return ||
-               tok.type == TokenType::Type ||
-               tok.type == TokenType::Underscore ||
-               tok.type == TokenType::CloseParenthesis ||
-               tok.type == TokenType::CloseBrace ||
-               tok.type == TokenType::CloseBracket;
-    }
+    bool can_terminate_statement(const Token& tok) const;
+    
 
-    Word getWord(string_iter pos)
-    {
-        char ch = *pos;
-        auto begin = pos;
-        long len = 1;
-        if (is_separator(ch)) {
-            return Word{begin, len};
-        }
-        while (!is_separator(ch) && pos != source.end()) {
-            pos++;
-            len++;
-            ch = *pos;
-        }
-        ch--;
-        return Word{begin, len - 1};
-    };
-
+    Word get_word(string_iter pos);
+   
     // This function analyzes last token in buffer, 
     // and if it is an end of statement token 
     // with newline value, it replace it with NewLine token. 
     // Otherwise does nothing
-    void replace_end_of_statement() {
-        auto& prev = buf.back();
-        if (prev.type == TokenType::EndOfExpression && prev.value == "\\n") {
-            buf.pop_back();
-            buf.emplace_back(TokenType::NewLine);
-        }
-    }
+    void replace_end_of_statement();
 
     /*
      * Understands, if the next statement is going to be an XML one; does

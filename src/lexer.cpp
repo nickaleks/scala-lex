@@ -1,10 +1,12 @@
 #include "lexer.h"
 
-void lexer::Lexer::scan() {
+using namespace lexer;
+void Lexer::scan() 
+{
     // lexer implementation goes here
     auto iterator = source.begin();
     while (iterator != source.end()) {
-        auto word = getWord(iterator);
+        auto word = get_word(iterator);
 
         if (xml_begins(iterator)) {
             process_xml(iterator);
@@ -173,5 +175,53 @@ void lexer::Lexer::scan() {
             }
             iterator += word.len;
         }
+    }
+}
+
+bool Lexer::is_separator(char ch) const 
+{
+    return ch == ' ' || ch == ',' || ch == '.' ||
+            ch == '(' || ch == ')' || ch == '{' ||
+            ch == '}' || ch == '[' || ch == ']' ||
+            ch == '\n' || ch == ';' || ch == '\t';
+}
+
+bool Lexer::can_terminate_statement(const Token& tok) const 
+{
+    return tok.type == TokenType::This ||
+           tok.type == TokenType::Null ||
+           tok.type == TokenType::True ||
+           tok.type == TokenType::False ||
+           tok.type == TokenType::Return ||
+           tok.type == TokenType::Type ||
+           tok.type == TokenType::Underscore ||
+           tok.type == TokenType::CloseParenthesis ||
+           tok.type == TokenType::CloseBrace ||
+           tok.type == TokenType::CloseBracket;
+}
+
+Lexer::Word Lexer::get_word(string_iter pos)
+{
+    char ch = *pos;
+    auto begin = pos;
+    long len = 1;
+    if (is_separator(ch)) {
+        return Word{begin, len};
+    }
+    while (!is_separator(ch) && pos != source.end()) {
+        pos++;
+        len++;
+        ch = *pos;
+    }
+    ch--;
+    return Word{begin, len - 1};
+}
+
+void Lexer::replace_end_of_statement()
+{
+    auto& prev = buf.back();
+    if (prev.type == TokenType::EndOfExpression && prev.value == "\\n") {
+        buf.pop_back();
+        buf.emplace_back(TokenType::NewLine);
     }
 }
