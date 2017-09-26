@@ -13,7 +13,8 @@ void Lexer::scan()
             buf.emplace_back(TokenType::XMLInclusion);
         }
         else if (comment_begins(iterator)) {
-            buf.emplace_back(TokenType::Comment);
+            auto commentText = process_comment(iterator);
+            buf.emplace_back(TokenType::Comment, *commentText);
         }
         else {
             if (word == " ") {
@@ -213,7 +214,6 @@ Lexer::Word Lexer::get_word(string_iter pos)
         len++;
         ch = *pos;
     }
-    ch--;
     return Word{begin, len - 1};
 }
 
@@ -224,4 +224,136 @@ void Lexer::replace_end_of_statement()
         buf.pop_back();
         buf.emplace_back(TokenType::NewLine);
     }
+}
+
+bool Lexer::xml_begins(string_iter iterator) {
+    // XML must be preceded with whitespace, or either of brackets
+    // If buffer is empty, skip this check
+    if (!buf.empty()) {
+        auto &prev = buf.back();
+        if (!(prev.type == TokenType::Whitespace || prev.type == TokenType::OpenBracket ||
+              prev.type == TokenType::OpenBrace))
+            return false;
+    }
+
+    // Then, goes the '<' symbol
+    char next = *iterator;
+    if (next != '<')
+        return false;
+
+    // Then, goes '_', base char or ideographic
+    iterator++;
+    next = *iterator;
+    if (next == '_' || isalpha(next)) {
+        iterator--;
+        return true;
+    }
+    iterator--;
+    return false;
+}
+
+void Lexer::process_xml(string_iter &iterator) {
+    // Take the first tag
+    iterator++;
+    char curChar = *iterator;
+    std::string firstTag;
+    firstTag += curChar;
+    iterator++;
+    while ((curChar = *iterator) != '>') {
+        firstTag += curChar;
+        iterator++;
+    }
+
+    // Now, we have the first tag and we need to proceed until
+    // we find the closing first tag, </firstTag>
+    std::string secondTag;
+    while (iterator != source.end()) {
+        secondTag = "";
+        // Proceed until we find an open bracket
+        iterator++;
+        curChar = *iterator;
+        if (curChar == '<') {
+            // If the open bracket is followed by a slash, it is
+            // a close tag
+            iterator++;
+            curChar = *iterator;
+            if (curChar == '/') {
+                // Take the tag, which is closed by those brackets
+                iterator++;
+                while ((curChar = *iterator) != '>') {
+                    secondTag += curChar;
+                    iterator++;
+                }
+                // If this tag is equal to the first one, we found
+                // end of XML insertion
+                if (firstTag == secondTag)
+                    break;
+            }
+        }
+    }
+    // If they are not equal, XML format is wrong
+    if (firstTag != secondTag)
+        throw InvalidXMLException();
+
+    // Iterator is on the last close bracket, so move it forward
+    iterator++;
+}
+
+bool Lexer::comment_begins(const string_iter iterator)
+{
+    auto changeableIterator = iterator;
+    // Comment begins with // or /*
+    auto curChar = *changeableIterator;
+    if (curChar != '/')
+        return false;
+
+    changeableIterator++;
+    curChar = *changeableIterator;
+
+    return curChar == '/' || curChar == '*';
+}
+
+Lexer::Word Lexer::process_comment(string_iter& iterator)
+{
+    auto begin = iterator;
+    size_t len = 2;
+    iterator++;
+    auto curChar = *iterator;
+    iterator++;
+
+    if (curChar == '/')
+    {
+        // Go until end of line or end of file is met
+        while (curChar != '\n' && iterator != source.end())
+        {
+            curChar = *iterator;
+            iterator++;
+            len++;
+        }
+    }
+    else
+    {
+        while (iterator != source.end())
+        {
+            curChar = *iterator;
+            if (curChar == '*')
+            {
+                iterator++;
+                len++;
+                curChar = *iterator;
+                if (curChar == '/')
+                    break;
+            }
+            iterator++;
+            len++;
+        }
+    }
+
+    if (iterator != source.end())
+    {
+        iterator++;
+        len++;
+    }
+
+    return Lexer::Word{begin, len};
 }
