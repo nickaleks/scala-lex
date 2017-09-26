@@ -19,13 +19,17 @@ void interpretation_mode()
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
     while (true) {
-        std::string input;
-        getline(std::cin, input);
-        lexer::Lexer lexer{input};
-        lexer.token_buffer();
-        std::cout << "\nResult:\n";
-        lexer.print_buffer();
-        std::cout << "\n\n>> ";
+        try {
+            std::string input;
+            getline(std::cin, input);
+            lexer::Lexer lexer{input};
+            lexer.token_buffer();
+            std::cout << "\nResult:\n";
+            lexer.print_buffer();
+            std::cout << "\n\n>> ";
+        } catch (lexer::InvalidXMLException &invalidXMLException) {
+            std::cout << "\nWrong XML format: " << invalidXMLException.what() << "\n\n>> ";
+        }
     }
 #pragma clang diagnostic pop
 }
