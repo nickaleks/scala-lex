@@ -85,7 +85,6 @@ private:
     bool is_separator(char ch) const;
 
     bool can_terminate_statement(const Token& tok) const;
-    
 
     Word get_word(string_iter pos);
    
@@ -99,145 +98,20 @@ private:
      * Understands, if the next statement is going to be an XML one; does
      * not shift the iterator
      */
-    bool xml_begins(string_iter iterator) {
-        // XML must be preceded with whitespace, or either of brackets
-        // If buffer is empty, skip this check
-        if (!buf.empty()) {
-            auto &prev = buf.back();
-            if (!(prev.type == TokenType::Whitespace || prev.type == TokenType::OpenBracket ||
-                  prev.type == TokenType::OpenBrace))
-                return false;
-        }
-
-        // Then, goes the '<' symbol
-        char next = *iterator;
-        if (next != '<')
-            return false;
-
-        // Then, goes '_', base char or ideographic
-        iterator++;
-        next = *iterator;
-        if (next == '_' || isalpha(next)) {
-            iterator--;
-            return true;
-        }
-        iterator--;
-        return false;
-    }
+    bool xml_begins(string_iter iterator);
 
     /*
      * Analyzes the XML and shifts the iterator; assumes that XML is valid
      */
-    void process_xml(string_iter &iterator) {
-        // Take the first tag
-        iterator++;
-        char curChar = *iterator;
-        std::string firstTag;
-        firstTag += curChar;
-        iterator++;
-        while ((curChar = *iterator) != '>') {
-            firstTag += curChar;
-            iterator++;
-        }
+    void process_xml(string_iter &iterator);
 
-        // Now, we have the first tag and we need to proceed until
-        // we find the closing first tag, </firstTag>
-        std::string secondTag;
-        while (iterator != source.end()) {
-            secondTag = "";
-            // Proceed until we find an open bracket
-            iterator++;
-            curChar = *iterator;
-            if (curChar == '<') {
-                // If the open bracket is followed by a slash, it is
-                // a close tag
-                iterator++;
-                curChar = *iterator;
-                if (curChar == '/') {
-                    // Take the tag, which is closed by those brackets
-                    iterator++;
-                    while ((curChar = *iterator) != '>') {
-                        secondTag += curChar;
-                        iterator++;
-                    }
-                    // If this tag is equal to the first one, we found
-                    // end of XML insertion
-                    if (firstTag == secondTag)
-                        break;
-                }
-            }
-        }
-
-        // If they are not equal, XML format is wrong
-        if (firstTag != secondTag)
-            throw InvalidXMLException();
-
-        // Iterator is on the last close bracket, so move it forward
-        iterator++;
-    }
-
-    enum class CommentType
-    {
-        Singleline,
-        Multiline
-    };
-
-    bool comment_begins(string_iter& iterator)
-    {
-        // Comment begins with // or /*
-        auto curChar = *iterator;
-        if (curChar != '/')
-            return false;
-
-        iterator++;
-        curChar = *iterator;
-
-        if (curChar == '/')
-        {
-            process_comment(iterator, CommentType::Singleline);
-            return true;
-        }
-        else if (curChar == '*')
-        {
-            process_comment(iterator, CommentType::Multiline);
-            return true;
-        }
-        return false;
-    }
-
-    void process_comment(string_iter& iterator, CommentType commentType)
-    {
-        iterator++;
-        auto curChar = *iterator;
-        iterator++;
-
-        if (commentType == CommentType::Singleline)
-        {
-            // Go until end of line is met
-            while (curChar != '\n' && iterator != source.end())
-            {
-                curChar = *iterator;
-                iterator++;
-            }
-        }
-        else
-        {
-            while (iterator != source.end())
-            {
-                curChar = *iterator;
-                if (curChar == '*')
-                {
-                    iterator++;
-                    curChar = *iterator;
-                    if (curChar == '/')
-                        break;
-                }
-                iterator++;
-            }
-        }
-
-        if (iterator != source.end())
-            iterator++;
-    }
+    /*
+     * Understands, if the following construction will be comment
+     */
+    bool comment_begins(string_iter iterator);
+    /*
+     * Processes the comment, shifting the iterator, and returns the comment itself
+     */
+    Word process_comment(string_iter& iterator);
 };
 }
