@@ -33,6 +33,8 @@
 
 # Build Directory
 build/
+# CLion dir
+cmake-build-debug/
 
 .vscode/
 .idea/
