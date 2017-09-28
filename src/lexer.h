@@ -1,43 +1,11 @@
 #include <vector>
 #include <iostream>
+#include "string_slice.h"
 #include "token.h"
 
 namespace lexer
 {
-template <typename Iter>
-class SourceWord
-{
-public:
-    Iter it;
-    const std::size_t len;
-
-    SourceWord(Iter it, std::size_t len): it{it}, len{len} {};
-
-    bool operator==(const std::string& rhs)
-    {
-        if (len != rhs.length()) {
-            return false;
-        }
-        for (int i = 0; i < len; i++) {
-            if (*(it + i) != rhs[i]){
-                return false;
-            }
-        }
-        return true;
-    };
-
-    // Makes copy of sliced string
-    std::string operator*() {
-        std::string res{};
-        res.reserve(len);
-        for (auto i = 0; i < len; i++, it++) {
-            res += *it;
-        }
-
-        return res;
-    }
-};
-
+    
 class InvalidXMLException: public std::runtime_error
 {
 public:
@@ -76,7 +44,6 @@ private:
 
     // Type declarations for convenience
     using string_iter = decltype(source.begin());
-    using Word = SourceWord<string_iter>;
 
     bool new_lines_enabled;
     // Parse source text and populate token buffer
@@ -86,7 +53,7 @@ private:
 
     bool can_terminate_statement(const Token& tok) const;
 
-    Word get_word(string_iter pos);
+    StringSlice get_word(string_iter pos);
    
     // This function analyzes last token in buffer, 
     // and if it is an end of statement token 
@@ -112,6 +79,6 @@ private:
     /*
      * Processes the comment, shifting the iterator, and returns the comment itself
      */
-    Word process_comment(string_iter& iterator);
+    StringSlice process_comment(string_iter& iterator);
 };
 }

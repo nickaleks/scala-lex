@@ -6,7 +6,7 @@ Scala lexical analysis without parsing literals and identifiers
 #### Requirements
 
 * CMake 3.6+
-* C++ Compiler with C++14 support (GCC 6+, Clang 3.4+)
+* C++ Compiler with C++17 support.(At least string_view)
 
 #### Compilation
 
