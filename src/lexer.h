@@ -1,6 +1,6 @@
 #include <vector>
 #include <iostream>
-#include <string_view>
+#include "string_slice.h"
 #include "token.h"
 
 namespace lexer
@@ -87,7 +87,7 @@ private:
 
     bool can_terminate_statement(const Token& tok) const;
 
-    std::string_view get_word(string_iter pos);
+    StringSlice get_word(string_iter pos);
    
     // This function analyzes last token in buffer, 
     // and if it is an end of statement token 
@@ -113,6 +113,6 @@ private:
     /*
      * Processes the comment, shifting the iterator, and returns the comment itself
      */
-    std::string_view process_comment(string_iter& iterator);
+    StringSlice process_comment(string_iter& iterator);
 };
 }

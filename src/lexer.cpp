@@ -200,20 +200,20 @@ bool Lexer::can_terminate_statement(const Token& tok) const
            tok.type == TokenType::CloseBracket;
 }
 
-std::string_view Lexer::get_word(string_iter pos)
+StringSlice Lexer::get_word(string_iter pos)
 {
     char ch = *pos;
     auto begin = pos;
     size_t len = 1;
     if (is_separator(ch)) {
-        return std::string_view{&(*begin), len};
+        return StringSlice{&(*begin), len};
     }
     while (!is_separator(ch) && pos != source.end()) {
         pos++;
         len++;
         ch = *pos;
     }
-    return std::string_view{&(*begin), len - 1};
+    return StringSlice{&(*begin), len - 1};
 }
 
 void Lexer::replace_end_of_statement()
@@ -312,7 +312,7 @@ bool Lexer::comment_begins(const string_iter iterator)
     return curChar == '/' || curChar == '*';
 }
 
-std::string_view Lexer::process_comment(string_iter& iterator)
+StringSlice Lexer::process_comment(string_iter& iterator)
 {
     auto begin = iterator;
     size_t len = 2;
@@ -354,5 +354,5 @@ std::string_view Lexer::process_comment(string_iter& iterator)
         len++;
     }
 
-    return std::string_view{&(*begin), len};
+    return StringSlice{&(*begin), len};
 }
