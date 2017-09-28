@@ -5,40 +5,7 @@
 
 namespace lexer
 {
-template <typename Iter>
-class SourceWord
-{
-public:
-    Iter it;
-    const std::size_t len;
-
-    SourceWord(Iter it, std::size_t len): it{it}, len{len} {};
-
-    bool operator==(const std::string& rhs)
-    {
-        if (len != rhs.length()) {
-            return false;
-        }
-        for (int i = 0; i < len; i++) {
-            if (*(it + i) != rhs[i]){
-                return false;
-            }
-        }
-        return true;
-    };
-
-    // Makes copy of sliced string
-    std::string operator*() {
-        std::string res{};
-        res.reserve(len);
-        for (auto i = 0; i < len; i++, it++) {
-            res += *it;
-        }
-
-        return res;
-    }
-};
-
+    
 class InvalidXMLException: public std::runtime_error
 {
 public:
@@ -77,7 +44,6 @@ private:
 
     // Type declarations for convenience
     using string_iter = decltype(source.begin());
-    using Word = SourceWord<string_iter>;
 
     bool new_lines_enabled;
     // Parse source text and populate token buffer
