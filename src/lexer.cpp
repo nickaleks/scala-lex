@@ -14,7 +14,7 @@ void Lexer::scan()
         }
         else if (comment_begins(iterator)) {
             auto commentText = process_comment(iterator);
-            buf.emplace_back(TokenType::Comment, *commentText);
+            buf.emplace_back(TokenType::Comment, commentText.data());
         }
         else {
             if (word == " ") {
@@ -172,9 +172,9 @@ void Lexer::scan()
             } else if (word == "\t") {
                 buf.emplace_back(TokenType::Tab);
             } else {
-                buf.emplace_back(TokenType::InvalidToken, *word);
+                buf.emplace_back(TokenType::InvalidToken, word.data());
             }
-            iterator += word.len;
+            iterator += word.length();
         }
     }
 }
@@ -201,20 +201,20 @@ bool Lexer::can_terminate_statement(const Token& tok) const
            tok.type == TokenType::CloseBracket;
 }
 
-Lexer::Word Lexer::get_word(string_iter pos)
+std::string_view Lexer::get_word(string_iter pos)
 {
     char ch = *pos;
     auto begin = pos;
     std::size_t len = 1;
     if (is_separator(ch)) {
-        return Word{begin, len};
+        return std::string_view{&(*begin), len - 1};
     }
     while (!is_separator(ch) && pos != source.end()) {
         pos++;
         len++;
         ch = *pos;
     }
-    return Word{begin, len - 1};
+    return std::string_view{&(*begin), len - 1};
 }
 
 void Lexer::replace_end_of_statement()
@@ -313,7 +313,7 @@ bool Lexer::comment_begins(const string_iter iterator)
     return curChar == '/' || curChar == '*';
 }
 
-Lexer::Word Lexer::process_comment(string_iter& iterator)
+std::string_view Lexer::process_comment(string_iter& iterator)
 {
     auto begin = iterator;
     size_t len = 2;
@@ -355,5 +355,5 @@ Lexer::Word Lexer::process_comment(string_iter& iterator)
         len++;
     }
 
-    return Lexer::Word{begin, len};
+    return std::string_view{&(*begin), len};
 }
