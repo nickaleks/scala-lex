@@ -7,7 +7,6 @@ void Lexer::scan()
     auto iterator = source.begin();
     while (iterator != source.end()) {
         auto word = get_word(iterator);
-
         if (xml_begins(iterator)) {
             process_xml(iterator);
             buf.emplace_back(TokenType::XMLInclusion);
@@ -205,9 +204,9 @@ std::string_view Lexer::get_word(string_iter pos)
 {
     char ch = *pos;
     auto begin = pos;
-    std::size_t len = 1;
+    size_t len = 1;
     if (is_separator(ch)) {
-        return std::string_view{&(*begin), len - 1};
+        return std::string_view{&(*begin), len};
     }
     while (!is_separator(ch) && pos != source.end()) {
         pos++;
