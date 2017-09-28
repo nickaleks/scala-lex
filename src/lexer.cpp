@@ -13,7 +13,7 @@ void Lexer::scan()
         }
         else if (comment_begins(iterator)) {
             auto commentText = process_comment(iterator);
-            buf.emplace_back(TokenType::Comment, commentText.data());
+            buf.emplace_back(TokenType::Comment, std::string(commentText));
         }
         else {
             if (word == " ") {
@@ -171,7 +171,7 @@ void Lexer::scan()
             } else if (word == "\t") {
                 buf.emplace_back(TokenType::Tab);
             } else {
-                buf.emplace_back(TokenType::InvalidToken, word.data());
+                buf.emplace_back(TokenType::InvalidToken, std::string(word));
             }
             iterator += word.length();
         }
